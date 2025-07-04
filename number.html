@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guess the Number</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background-color: #000;
+      font-family: 'Press Start 2P', cursive;
+      color: rgb(207, 207, 207);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 14px;
+      width: 220px;
+      font-family: 'Press Start 2P', cursive;
+      text-align: center;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      font-family: 'Press Start 2P', cursive;
+      background-color: rgb(211, 211, 211);
+      color: #000;
+      border: none;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .scoreboard {
+      margin-top: 20px;
+      font-size: 12px;
+    }
+    #message {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎮 GUESS THE NUMBER</h1>
+  <button id="startBtn">START GAME</button><br>
+  <input type="number" id="guessInput" placeholder="Enter a number (1–20)" disabled>
+  <button id="checkBtn" disabled>CHECK</button>
+
+  <div id="message">⏳ Press "Start Game" to begin...</div>
+
+  <div class="scoreboard">
+    🧮 Score: <span id="score">0</span> |
+    🏆 Highscore: <span id="highscore">0</span>
+  </div>
+
+  <script>
+    let secretNumber;
+    let score = 20;
+    let highscore = 0;
+
+    const guessInput = document.getElementById("guessInput");
+    const message = document.getElementById("message");
+    const scoreDisplay = document.getElementById("score");
+    const highscoreDisplay = document.getElementById("highscore");
+
+    document.getElementById("startBtn").onclick = () => {
+      secretNumber = Math.floor(Math.random() * 20) + 1;
+      score = 20;
+      guessInput.disabled = false;
+      document.getElementById("checkBtn").disabled = false;
+      message.textContent = "⏳ Start guessing...";
+      scoreDisplay.textContent = score;
+      guessInput.value = "";
+      guessInput.placeholder = "Enter a number (1–20)";
+      document.body.style.backgroundColor = "#000"; // reset background
+    };
+
+    document.getElementById("checkBtn").onclick = () => {
+      const guess = Number(guessInput.value);
+
+      if (!guess || guess < 1 || guess > 20) {
+        message.textContent = "❗ Enter a number between 1–20!";
+        return;
+      }
+
+      if (guess === secretNumber) {
+        message.textContent = `🎉 Correct! It was ${secretNumber}`;
+        document.body.style.backgroundColor = "#1db954"; // green background
+        if (score > highscore) {
+          highscore = score;
+          highscoreDisplay.textContent = highscore;
+        }
+        guessInput.disabled = true;
+        document.getElementById("checkBtn").disabled = true;
+      } else {
+        score--;
+        scoreDisplay.textContent = score;
+        if (score === 0) {
+          message.textContent = "💥 You lost! Game over.";
+          guessInput.disabled = true;
+          document.getElementById("checkBtn").disabled = true;
+        } else {
+          message.textContent = guess < secretNumber ? "📉 Too low!" : "📈 Too high!";
+        }
+      }
+    };
+  </script>
+
+</body>
+</html>
+
